@@ -3,6 +3,7 @@ from db.database import create_db_and_tables
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.Controller.homeController import router as home_router
+from app.Controller.authController import router as auth_router
 
 
 @asynccontextmanager
@@ -24,6 +25,7 @@ def load_app() -> FastAPI:
     # --- Routers --- #
 
     app.include_router(home_router)
+    app.include_router(auth_router)
 
     # --------------- #
 
