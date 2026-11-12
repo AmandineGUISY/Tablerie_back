@@ -11,7 +11,7 @@ class CustomerRegister(SQLModel):
     first_name: str
     last_name: str
     email: EmailStr 
-    tel: FrenchPhone
+    tel: FrenchPhone | None = None
     password: str = Field(min_length=12)
 
     @field_validator('password')
