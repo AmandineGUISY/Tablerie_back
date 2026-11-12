@@ -6,4 +6,6 @@ bcrypt==4.3.0
 sqlmodel
 passlib
 pyjwt
+pydantic-extra-types
 pydantic-settings
+phonenumbers

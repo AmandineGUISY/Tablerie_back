@@ -19,7 +19,7 @@ docker compose up -d
 fastapi dev main.py
 
 # pour relancer la base de données et son volume
-docker volume rm constellation_backend_postgres_data
+docker volume rm tablerie_backend_postgres_data
 docker compose up -d
 
 
