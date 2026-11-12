@@ -1,0 +1,9 @@
+fastapi[standard]
+sqlalchemy
+psycopg2-binary
+pydantic
+bcrypt==4.3.0
+sqlmodel
+passlib
+pyjwt
+pydantic-settings
