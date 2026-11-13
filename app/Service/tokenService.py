@@ -7,6 +7,7 @@ ACCESS_TOKEN_SECRET_KEY = "WEvRjO6fnYKYpAu7jR8T41Tk93OyFvQ4rmmuQ7djuo7S2YQefabzr
 ACCESS_TOKEN_ALGORITHM = "HS256"
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
+resto_oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/resto/login")
 
 def create_access_token(data: dict, expires_delta: timedelta):
     to_encode = data.copy()
@@ -36,6 +37,14 @@ def get_current_user(token: str = Depends(oauth2_scheme)) -> str:
             headers={"WWW-Authenticate": "Bearer"},
         )
 
+    account_type = payload.get("account_type")
+    if account_type not in (None, "customer"):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid token account type",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
     customer_id = payload.get("sub")
     if not isinstance(customer_id, str):
         raise HTTPException(
@@ -45,3 +54,23 @@ def get_current_user(token: str = Depends(oauth2_scheme)) -> str:
         )
 
     return customer_id
+
+
+def get_current_resto(token: str = Depends(resto_oauth2_scheme)) -> str:
+    payload = decode_access_token(token)
+    if payload is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid or expired token",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    resto_id = payload.get("sub")
+    if payload.get("account_type") != "resto" or not isinstance(resto_id, str):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid token subject",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    return resto_id
